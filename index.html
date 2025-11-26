@@ -3,28 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-Accelerated Activity Generator</title>
+    <title>Activity & Fact Generator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>💡 Feeling Bored? Get an Idea! 💡</h1>
+        <h1>💡 Activity & Random Fact Generator 🐱</h1>
         <div class="card">
-            <p id="fact-display">
-                Loading a fun activity idea...
+            
+            <h2>Activity Idea:</h2>
+            <p id="activity-display">
+                Loading activity...
             </p>
             
+            <hr> 
+            
+            <h2>Random Fact:</h2>
+            <p id="fact-display">
+                Loading fact...
+            </p>
+
             <div class="button-group">
-                <button id="fact-button">
-                    New Activity
+                <button id="main-button">
+                    Get New Ideas
                 </button>
-                
                 <button id="theme-button">
                     Toggle Dark Mode
                 </button>
             </div>
         </div>
-        <p class="source">Powered by the public Bored API.</p>
+        <p class="source">Powered by Bored API and Cat Facts API.</p>
     </div>
 
     <script src="script.js"></script>
