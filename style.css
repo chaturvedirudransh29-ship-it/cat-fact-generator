@@ -5,13 +5,13 @@
 
 #background-container {
     /* Use a subtle repeating image */
-    background-image: url('background.jpeg'); 
+    background-image: url('background.png'); 
     
     /* Ensure the image repeats across the entire page */
     background-repeat: repeat; 
     
     /* Make the image subtle */
-    opacity: 0.9; /* Makes the entire background faint (you might need to adjust this) */
+    opacity: 0.2; /* Makes the entire background faint (you might need to adjust this) */
     
     /* Fallback color for when the image is not found */
     background-color: var(--bg-color); 
@@ -36,8 +36,4 @@ body {
     background-image: url('background.png'); 
     background-repeat: repeat;
     background-attachment: fixed; /* Keeps the background from scrolling */
-
 }
-
-
-
