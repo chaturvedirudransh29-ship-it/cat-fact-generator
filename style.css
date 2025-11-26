@@ -1,0 +1,41 @@
+/* Reused CSS Variables and Base Styles from previous modification */
+/* ... (Keep the :root, .dark-mode, .container, .card, etc. styles) ... */
+
+/* --- BACKGROUND DECORATION --- */
+
+#background-container {
+    /* Use a subtle repeating image */
+    background-image: C:\Users\rudra\OneDrive\Documents\website\'background.jpeg'; 
+    
+    /* Ensure the image repeats across the entire page */
+    background-repeat: repeat; 
+    
+    /* Make the image subtle */
+    opacity: 0.9; /* Makes the entire background faint (you might need to adjust this) */
+    
+    /* Fallback color for when the image is not found */
+    background-color: var(--bg-color); 
+    
+    /* Ensure the content sits on top */
+    position: relative;
+    z-index: 1; 
+}
+
+/* Ensure the main content card is fully opaque and easy to read */
+.card {
+    /* ... (Existing card styles) ... */
+    position: relative;
+    z-index: 10; /* Make sure the card is above the background */
+    background-color: var(--card-bg); /* Use the opaque card background */
+}
+
+/* Ensure the body remains functional and centered */
+body {
+    /* ... (Existing body styles) ... */
+    /* Add the background image to the body itself if using the simplified approach */
+    background-image: url('background.png'); 
+    background-repeat: repeat;
+    background-attachment: fixed; /* Keeps the background from scrolling */
+
+}
+
