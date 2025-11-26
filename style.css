@@ -11,7 +11,7 @@
     background-repeat: repeat; 
     
     /* Make the image subtle */
-    opacity: 0.2; /* Makes the entire background faint (you might need to adjust this) */
+    opacity: 0.9; /* A higher opacity (closer to 1.0) means more visible. */
     
     /* Fallback color for when the image is not found */
     background-color: var(--bg-color); 
@@ -37,3 +37,4 @@ body {
     background-repeat: repeat;
     background-attachment: fixed; /* Keeps the background from scrolling */
 }
+
