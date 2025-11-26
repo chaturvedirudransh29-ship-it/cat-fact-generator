@@ -1,15 +1,17 @@
-// 1. Define the new API endpoint (Bored API)
-const API_URL = 'https://www.boredapi.com/api/activity';
-const CACHE_KEY = 'lastActivity';
+// --- API Endpoints and Constants ---
+const ACTIVITY_API_URL = 'https://www.boredapi.com/api/activity';
+const FACT_API_URL = 'https://catfact.ninja/fact';
+const CACHE_KEY_ACTIVITY = 'lastActivity';
+const CACHE_KEY_FACT = 'lastFact';
 
-// 2. Select the HTML elements
+// --- Select HTML Elements ---
+const activityDisplay = document.getElementById('activity-display');
 const factDisplay = document.getElementById('fact-display');
-const factButton = document.getElementById('fact-button');
+const mainButton = document.getElementById('main-button');
 const themeButton = document.getElementById('theme-button');
 
-// --- THEME SWITCHER LOGIC ---
+// --- THEME SWITCHER LOGIC (NO CHANGE) ---
 function loadTheme() {
-    // Check local storage for the user's preferred theme
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
@@ -17,10 +19,7 @@ function loadTheme() {
 }
 
 function toggleTheme() {
-    // Toggles the 'dark-mode' class on the body element
     document.body.classList.toggle('dark-mode');
-
-    // Save the new state to local storage
     if (document.body.classList.contains('dark-mode')) {
         localStorage.setItem('theme', 'dark');
     } else {
@@ -28,68 +27,95 @@ function toggleTheme() {
     }
 }
 
-// --- DATA FETCHING AND CACHING LOGIC ---
+// --- DATA FETCHING & DISPLAY FUNCTIONS ---
 
-// Function to display an activity and save it to cache
-function displayAndCache(activity) {
-    factDisplay.textContent = activity;
-    // Save the successful result to local storage for caching
-    localStorage.setItem(CACHE_KEY, activity);
-}
-
-async function fetchNewActivity() {
-    factDisplay.textContent = "Fetching a new idea..."; 
-    factButton.disabled = true; 
-
+/**
+ * Handles fetching, parsing, caching, and displaying data for ONE API.
+ * @param {string} url - The API URL.
+ * @param {string} key - The cache key.
+ * @param {HTMLElement} displayElement - The HTML element to update.
+ * @param {string} dataKey - The key in the JSON response (e.g., 'activity' or 'fact').
+ */
+async function fetchAndDisplay(url, key, displayElement, dataKey) {
     try {
-        const response = await fetch(API_URL);
-
+        const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
         const data = await response.json();
+        const content = data[dataKey]; // Get the data using the dynamic key
         
-        // **Modification 1: Data Parsing** - The Bored API uses 'activity' not 'fact'
-        if (data.activity) {
-            displayAndCache(data.activity);
-        } else {
-            // Handle cases where the API might return an error structure
-             factDisplay.textContent = "Error: Could not retrieve activity. Try again.";
-        }
-        
+        displayElement.textContent = content;
+        localStorage.setItem(key, content); // Cache the result
     } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        factDisplay.textContent = "Error: Could not retrieve activity. Check your console for details.";
-    } finally {
-        factButton.disabled = false;
+        console.error(`Fetch failed for ${dataKey}:`, error);
+        displayElement.textContent = `Error loading ${dataKey}.`;
     }
 }
 
-// --- INITIALIZATION ---
 
-// Load theme preference on page load
-loadTheme();
+/**
+ * Main function using Promise.all() to fetch both data sources concurrently.
+ */
+async function fetchBothIdeas() {
+    mainButton.disabled = true; 
+    activityDisplay.textContent = "Fetching...";
+    factDisplay.textContent = "Fetching...";
 
-// **Modification 3: Caching (Check for saved data on startup)**
-const cachedActivity = localStorage.getItem(CACHE_KEY);
-
-if (cachedActivity) {
-    // If cache exists, display it instantly (fast load time)
-    factDisplay.textContent = `[Cached] Last activity was: ${cachedActivity}`;
+    // 1. Create a Promise for each request
+    const activityPromise = fetchAndDisplay(
+        ACTIVITY_API_URL, 
+        CACHE_KEY_ACTIVITY, 
+        activityDisplay, 
+        'activity' // Key for Bored API
+    );
     
-    // Fetch a new one in the background for the next click
-    // Note: We don't call fetchNewActivity() immediately here, we wait for the click.
-} else {
-    // If no cache, fetch a fresh one
-    fetchNewActivity();
+    const factPromise = fetchAndDisplay(
+        FACT_API_URL, 
+        CACHE_KEY_FACT, 
+        factDisplay, 
+        'fact' // Key for Cat Facts API
+    );
+    
+    try {
+        // 2. Wait for BOTH promises to resolve successfully
+        await Promise.all([activityPromise, factPromise]);
+        
+    } catch (error) {
+        // If either fetch fails, the Promise.all() will be rejected
+        console.error("One or more requests failed:", error);
+    } finally {
+        mainButton.disabled = false;
+    }
+}
+
+
+// --- INITIALIZATION AND CACHING ---
+
+function loadInitialContent() {
+    loadTheme();
+    
+    // Check and load cached Activity
+    const cachedActivity = localStorage.getItem(CACHE_KEY_ACTIVITY);
+    if (cachedActivity) {
+        activityDisplay.textContent = `[Cached] Activity: ${cachedActivity}`;
+    }
+
+    // Check and load cached Fact
+    const cachedFact = localStorage.getItem(CACHE_KEY_FACT);
+    if (cachedFact) {
+        factDisplay.textContent = `[Cached] Fact: ${cachedFact}`;
+    }
+    
+    // Fetch fresh content immediately
+    fetchBothIdeas(); 
 }
 
 
 // --- EVENT LISTENERS ---
 
-// Attach the main function to the New Activity button
-factButton.addEventListener('click', fetchNewActivity);
-
-// Attach the toggle function to the Theme button
+mainButton.addEventListener('click', fetchBothIdeas);
 themeButton.addEventListener('click', toggleTheme);
+
+// Start the application
+loadInitialContent();
