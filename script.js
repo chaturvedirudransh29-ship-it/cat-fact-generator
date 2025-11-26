@@ -119,4 +119,3 @@ themeButton.addEventListener('click', toggleTheme);
 
 // Start the application
 loadInitialContent();
-
