@@ -1,49 +1,95 @@
-// 1. Define the API endpoint (The address where the data lives)
-const API_URL = 'https://catfact.ninja/fact';
+// 1. Define the new API endpoint (Bored API)
+const API_URL = 'https://www.boredapi.com/api/activity';
+const CACHE_KEY = 'lastActivity';
 
-// 2. Select the HTML elements we need to manipulate
+// 2. Select the HTML elements
 const factDisplay = document.getElementById('fact-display');
 const factButton = document.getElementById('fact-button');
+const themeButton = document.getElementById('theme-button');
 
-/**
- * 3. The asynchronous function to fetch data from the API.
- * The 'async' keyword allows us to use 'await' inside the function.
- */
-async function fetchCatFact() {
-    // Show a loading message while waiting for the network
-    factDisplay.textContent = "Fetching a purr-fect fact..."; 
-    factButton.disabled = true; // Disable button to prevent spamming the API
-
-    try {
-        // Use 'await' to pause the function until the response is received
-        const response = await fetch(API_URL);
-
-        // Check if the HTTP status code indicates success (200-299)
-        if (!response.ok) {
-            // Throw an error if the status is bad (e.g., 404, 500)
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        // Use 'await' to parse the response body as JSON
-        const data = await response.json();
-        // The structure of the data object is like: { fact: "...", length: 10 }
-
-        // Update the HTML element with the actual fact text
-        factDisplay.textContent = data.fact;
-        
-    } catch (error) {
-        // This block catches any error that occurred during the fetch process
-        console.error('There was a problem with the fetch operation:', error);
-        factDisplay.textContent = "Error: Could not retrieve fact. Check your console for details.";
-    } finally {
-        // The 'finally' block runs regardless of success or failure
-        factButton.disabled = false; // Re-enable the button
+// --- THEME SWITCHER LOGIC ---
+function loadTheme() {
+    // Check local storage for the user's preferred theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
     }
 }
 
-// 4. Attach the function to the button click event (Event Listener)
-// When the button is clicked, the fetchCatFact function runs.
-factButton.addEventListener('click', fetchCatFact);
+function toggleTheme() {
+    // Toggles the 'dark-mode' class on the body element
+    document.body.classList.toggle('dark-mode');
 
-// 5. Initial call: Fetch a fact when the page first loads
-fetchCatFact();
+    // Save the new state to local storage
+    if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// --- DATA FETCHING AND CACHING LOGIC ---
+
+// Function to display an activity and save it to cache
+function displayAndCache(activity) {
+    factDisplay.textContent = activity;
+    // Save the successful result to local storage for caching
+    localStorage.setItem(CACHE_KEY, activity);
+}
+
+async function fetchNewActivity() {
+    factDisplay.textContent = "Fetching a new idea..."; 
+    factButton.disabled = true; 
+
+    try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // **Modification 1: Data Parsing** - The Bored API uses 'activity' not 'fact'
+        if (data.activity) {
+            displayAndCache(data.activity);
+        } else {
+            // Handle cases where the API might return an error structure
+             factDisplay.textContent = "Error: Could not retrieve activity. Try again.";
+        }
+        
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        factDisplay.textContent = "Error: Could not retrieve activity. Check your console for details.";
+    } finally {
+        factButton.disabled = false;
+    }
+}
+
+// --- INITIALIZATION ---
+
+// Load theme preference on page load
+loadTheme();
+
+// **Modification 3: Caching (Check for saved data on startup)**
+const cachedActivity = localStorage.getItem(CACHE_KEY);
+
+if (cachedActivity) {
+    // If cache exists, display it instantly (fast load time)
+    factDisplay.textContent = `[Cached] Last activity was: ${cachedActivity}`;
+    
+    // Fetch a new one in the background for the next click
+    // Note: We don't call fetchNewActivity() immediately here, we wait for the click.
+} else {
+    // If no cache, fetch a fresh one
+    fetchNewActivity();
+}
+
+
+// --- EVENT LISTENERS ---
+
+// Attach the main function to the New Activity button
+factButton.addEventListener('click', fetchNewActivity);
+
+// Attach the toggle function to the Theme button
+themeButton.addEventListener('click', toggleTheme);
