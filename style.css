@@ -1,0 +1,57 @@
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f5; /* Light background */
+    color: #333;
+}
+
+.container {
+    text-align: center;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+}
+
+h1 {
+    color: #4a4a8f; /* A nice purple-blue */
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+#fact-display {
+    font-size: 1.2em;
+    min-height: 50px; /* Ensures the box doesn't collapse while loading */
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+#fact-button {
+    background-color: #ff9900; /* Bright orange for the button */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#fact-button:hover {
+    background-color: #e68a00; /* Slightly darker orange on hover */
+}
+
+.source {
+    font-size: 0.8em;
+    color: #777;
+}
