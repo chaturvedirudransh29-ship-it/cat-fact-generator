@@ -1,39 +1,84 @@
-/* Reused CSS Variables and Base Styles from previous modification */
-/* ... (Keep the :root, .dark-mode, .container, .card, etc. styles) ... */
-
-/* --- BACKGROUND DECORATION --- */
-
-#background-container {
-    /* Use a subtle repeating image */
-    background-image: url('background.png'); 
-    
-    /* Ensure the image repeats across the entire page */
-    background-repeat: repeat; 
-    
-    /* Make the image subtle */
-    opacity: 0.2; /* Makes the entire background faint (you might need to adjust this) */
-    
-    /* Fallback color for when the image is not found */
-    background-color: var(--bg-color); 
-    
-    /* Ensure the content sits on top */
-    position: relative;
-    z-index: 1; 
+:root {
+    /* Define CSS Variables for easy theme switching */
+    --bg-color: #f0f0f5;
+    --text-color: #333;
+    --card-bg: #ffffff;
+    --primary-color: #4a4a8f;
+    --button-primary: #ff9900;
+    --button-hover: #e68a00;
 }
 
-/* Ensure the main content card is fully opaque and easy to read */
-.card {
-    /* ... (Existing card styles) ... */
-    position: relative;
-    z-index: 10; /* Make sure the card is above the background */
-    background-color: var(--card-bg); /* Use the opaque card background */
+/* 🎨 Dark Mode Definition */
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --primary-color: #90caf9;
+    --button-primary: #bb86fc;
+    --button-hover: #a170e8;
 }
 
-/* Ensure the body remains functional and centered */
 body {
-    /* ... (Existing body styles) ... */
-    /* Add the background image to the body itself if using the simplified approach */
-    background-image: url('background.png'); 
-    background-repeat: repeat;
-    background-attachment: fixed; /* Keeps the background from scrolling */
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--bg-color); /* Use CSS Variable */
+    color: var(--text-color); /* Use CSS Variable */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.container {
+    text-align: center;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+}
+
+h1 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+#fact-display {
+    font-size: 1.2em;
+    min-height: 50px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+}
+
+#fact-button, #theme-button {
+    background-color: var(--button-primary);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#fact-button:hover, #theme-button:hover {
+    background-color: var(--button-hover);
+}
+
+.source {
+    font-size: 0.8em;
+    color: var(--text-color);
 }
