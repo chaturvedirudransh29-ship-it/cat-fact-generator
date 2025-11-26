@@ -5,7 +5,7 @@
 
 #background-container {
     /* Use a subtle repeating image */
-    background-image: url('background.jpeg'); 
+    background-image: C:\Users\rudra\OneDrive\Documents\website('background.jpeg'); 
     
     /* Ensure the image repeats across the entire page */
     background-repeat: repeat; 
@@ -36,4 +36,5 @@ body {
     background-image: url('background.png'); 
     background-repeat: repeat;
     background-attachment: fixed; /* Keeps the background from scrolling */
+
 }
