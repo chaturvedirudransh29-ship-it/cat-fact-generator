@@ -1,3 +1,23 @@
+:root {
+    /* Define CSS Variables for easy theme switching */
+    --bg-color: #f0f0f5;
+    --text-color: #333;
+    --card-bg: #ffffff;
+    --primary-color: #4a4a8f;
+    --button-primary: #ff9900;
+    --button-hover: #e68a00;
+}
+
+/* 🎨 Dark Mode Definition */
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --primary-color: #90caf9;
+    --button-primary: #bb86fc;
+    --button-hover: #a170e8;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     display: flex;
@@ -5,8 +25,9 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-color: #f0f0f5; /* Light background */
-    color: #333;
+    background-color: var(--bg-color); /* Use CSS Variable */
+    color: var(--text-color); /* Use CSS Variable */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
 }
 
 .container {
@@ -17,12 +38,12 @@ body {
 }
 
 h1 {
-    color: #4a4a8f; /* A nice purple-blue */
+    color: var(--primary-color);
     margin-bottom: 20px;
 }
 
 .card {
-    background-color: #ffffff;
+    background-color: var(--card-bg);
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 30px;
@@ -31,27 +52,33 @@ h1 {
 
 #fact-display {
     font-size: 1.2em;
-    min-height: 50px; /* Ensures the box doesn't collapse while loading */
+    min-height: 50px;
     margin-bottom: 20px;
     line-height: 1.5;
 }
 
-#fact-button {
-    background-color: #ff9900; /* Bright orange for the button */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+}
+
+#fact-button, #theme-button {
+    background-color: var(--button-primary);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 15px;
     font-size: 1em;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-#fact-button:hover {
-    background-color: #e68a00; /* Slightly darker orange on hover */
+#fact-button:hover, #theme-button:hover {
+    background-color: var(--button-hover);
 }
 
 .source {
     font-size: 0.8em;
-    color: #777;
+    color: var(--text-color);
 }
